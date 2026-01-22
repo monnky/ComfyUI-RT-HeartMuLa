@@ -64,7 +64,7 @@ pip install -r requirements.txt
 
 ### $${\color{yellow}Step \ 4: \ Download \ Model \ Files}$$
 
-Navigate to your `ComfyUI/models` directory and use the Hugging Face CLI to download the required weights.
+Navigate to your `ComfyUI/models` directory and download the required weights.
 
 > [!TIP]
 > Ensure you have the [git-lfs-windows.exe](https://git-lfs.com/) installed.
