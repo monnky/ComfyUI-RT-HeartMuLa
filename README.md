@@ -49,6 +49,27 @@ Navigate to your `ComfyUI/models` directory and use the Hugging Face CLI to down
 # Navigate to models folder
 cd ComfyUI/models
 
+### $${\color{yellow}Model \ Sources}$$
+
+Explore the technical foundations and official repositories for the models used in this project:
+
+* **GitHub Repository:** [HeartMuLa/heartlib](https://github.com/HeartMuLa/heartlib)
+* **Technical Paper:** [ArXiv: 2601.10547](https://arxiv.org/abs/2601.10547)
+* **Official Demo:** [HeartMuLa Project Page](https://heartmula.github.io/)
+
+#### **Hugging Face Model Hub:**
+* **Main Model (3B):** [HeartMuLa-oss-3B](https://huggingface.co/HeartMuLa/HeartMuLa-oss-3B)
+* **Codec:** [HeartCodec-oss](https://huggingface.co/HeartMuLa/HeartCodec-oss)
+* **Transcriptor:** [HeartTranscriptor-oss](https://huggingface.co/HeartMuLa/HeartTranscriptor-oss)
+
+---
+
+### $${\color{yellow}Credits}$$
+
+Special thanks to the **HeartMuLa** team for providing the open-source weights and research that make these nodes possible.
+
+* **HeartMuLa Organization:** [Hugging Face Profile](https://huggingface.co/HeartMuLa)
+
 # Download model weights to specific local directories
 huggingface-cli download HeartMuLa/HeartMuLaGen --local-dir ./HeartMuLa
 huggingface-cli download HeartMuLa/HeartMuLa-oss-3B --local-dir ./HeartMuLa/HeartMuLa-oss-3B
