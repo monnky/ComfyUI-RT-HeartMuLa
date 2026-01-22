@@ -1,35 +1,38 @@
 # ComfyUI-RT-HeartMuLa
 
-Installation
-
-A custom node extension for ComfyUI.
-
----
-
-## Features
-
-- Easy integration with ComfyUI
-- Lightweight and modular
-- Designed for real-time workflows
-
----
-
-## Prerequisites
-
-- Python 3.10+
-- Git
-- ComfyUI installed and working
-
-> **Windows Users:**  
-> Please run Command Prompt as **Administrator**.
-
----
+A custom node suite for ComfyUI.
 
 ## Installation
 
-### Step 1: Clone the Repository
+Follow these steps to get **ComfyUI-RT-HeartMuLa** up and running.
 
-Navigate to your `ComfyUI/custom_nodes` directory and run:
+### Step 1: Clone the Repository
+Open your terminal or command prompt, navigate to your `ComfyUI\custom_nodes` folder, and run:
 
 ```bash
-git clone https://github.com/monnky/ComfyUI-RT-HeartMuLa
+git clone [https://github.com/monnky/ComfyUI-RT-HeartMuLa](https://github.com/monnky/ComfyUI-RT-HeartMuLa)
+
+```
+Step 2: Navigate to the Directory
+Change into the project folder:
+
+```bash
+cd ComfyUI-RT-HeartMuLa
+```
+
+
+Step 3: Install Dependencies
+
+First Try install only 3 dep's
+```bash
+pip install soundfile
+pip install torchtune
+pip install torchao
+```
+
+(if doesnt work, install all requirments)
+Install the required Python packages:
+
+```bash
+pip install -r requirements.txt
+```
