@@ -55,6 +55,11 @@ huggingface-cli download HeartMuLa/HeartMuLa-oss-3B --local-dir ./HeartMuLa/Hear
 huggingface-cli download HeartMuLa/HeartCodec-oss --local-dir ./HeartMuLa/HeartCodec-oss
 huggingface-cli download HeartMuLa/HeartTranscriptor-oss --local-dir ./HeartMuLa/HeartTranscriptor-oss
 ```
+___
+
+Model File Structure
+Once downloaded, your folder should look like this:
+![Model Files Location](assets/modelfiles.png)
 
 ___
 
