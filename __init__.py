@@ -45,7 +45,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
 print("\n" + "=" * 60)
 print(f"ComfyUI [{ORANGE}R{YELLOW}T{RESET} HeartMuLa]")
 print("=" * 60)
-print("Version: 2.7.3 (Modular Master)")
+print("Version: 1.0.6 (Modular Master)")
 print(f"Loaded {len(NODE_CLASS_MAPPINGS)} nodes:")
 for name, cls in NODE_CLASS_MAPPINGS.items():
     display = NODE_DISPLAY_NAME_MAPPINGS.get(name, name)
@@ -58,5 +58,6 @@ print("  - Official HeartLib Preprocessing Active")
 print("  - Native Quantization: 4-bit/8-bit via BitsAndBytes")
 print("  - Generation Dashboard: Visual table report enabled")
 print("=" * 60 + "\n")
+
 
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
