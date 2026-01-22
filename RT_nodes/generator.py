@@ -1,5 +1,6 @@
 import torch
 import time
+import numpy as np
 import comfy.model_management as mm
 from tqdm import tqdm
 from datetime import datetime
@@ -30,21 +31,28 @@ class HeartMuLaGenerator:
     def generate(self, model, tokenizer, codec, gen_config, lyrics, auto_clear_kv_cache, tags, duration_seconds, cfg_scale, temperature, top_k, seed):
         start_time_all = time.time()
         
-        # 1. Technical Report
+        # 1. FULL REPORT RESTORED
         print_generation_dashboard([
             ("MODEL", LAST_LOADER_INFO.get('model_name', 'Active')),
             ("QUANT", LAST_LOADER_INFO.get('quant', 'N/A')),
             ("PRECISION", LAST_LOADER_INFO.get('prec', 'N/A')),
-            ("DURATION", f"{duration_seconds}s"),
+            ("COMPILE", LAST_LOADER_INFO.get('compiled', 'DISABLED')),
+            ("DEVICE", str(model.device)),
+            ("FRAME RATE", "12.5 Hz (HeartCodec Spec)"),
+            ("ARCHITECTURE", "Hierarchical (Global/Local)"),
+            ("DURATION", f"{duration_seconds}s (Max)"),
             ("CFG SCALE", str(cfg_scale)),
-            ("SEED", str(seed))
+            ("TEMP", str(temperature)),
+            ("TOP_K", str(top_k)),
+            ("SEED", str(seed)),
+            ("TAGS", tags.replace("\n", " ").strip()[:60] + "...")
         ])
 
         mm.soft_empty_cache()
         device, dtype = model.device, model.dtype
         torch.manual_seed(seed)
 
-        # 2. Text Preprocessing
+        # 2. Preprocessing
         tags_processed = f"<tag>{tags.lower().strip()}</tag>"
         def _encode(txt): return tokenizer.encode(txt).ids if hasattr(tokenizer, "encode") and hasattr(tokenizer.encode(txt), "ids") else tokenizer.encode(txt, add_special_tokens=False)
         tags_ids, lyrics_ids = _encode(tags_processed), _encode(lyrics.lower().strip())
@@ -54,31 +62,32 @@ class HeartMuLaGenerator:
             if ids[-1] != gen_config.text_eos_id: ids.append(gen_config.text_eos_id)
 
         prompt_len = len(tags_ids) + 1 + len(lyrics_ids)
-        parallel_number = codec.config.num_quantizers + 1 if hasattr(codec, "config") else 9
+        parallel_number = 9 # HeartCodec Spec
+        
+        # 3. Model & Cache Initialization
+        bs_size = 2 if cfg_scale != 1.0 else 1
+        if hasattr(model, "setup_caches"): model.setup_caches(bs_size)
+        if auto_clear_kv_cache and hasattr(model, "reset_caches"):
+            try: model.reset_caches()
+            except: pass
+
+        def _cfg_cat(t): return torch.cat([t.unsqueeze(0)] * bs_size, dim=0)
+        
         tokens = torch.zeros([prompt_len, parallel_number], dtype=torch.long)
         tokens[:len(tags_ids), -1] = torch.tensor(tags_ids)
         tokens[len(tags_ids) + 1:, -1] = torch.tensor(lyrics_ids)
         tokens_mask = torch.zeros_like(tokens, dtype=torch.bool); tokens_mask[:, -1] = True
-
-        # 3. Model Setup
-        if auto_clear_kv_cache and hasattr(model, "reset_caches"):
-            model.reset_caches()
-
-        bs_size = 2 if cfg_scale != 1.0 else 1
-        if hasattr(model, "setup_caches"): model.setup_caches(bs_size)
-        def _cfg_cat(t): return torch.cat([t.unsqueeze(0)] * bs_size, dim=0)
-
+        
         prompt_tokens, prompt_tokens_mask = _cfg_cat(tokens).to(device), _cfg_cat(tokens_mask).to(device)
         muq_dim = 512 if not hasattr(model.config, "muq_dim") else model.config.muq_dim
         continuous_segment = _cfg_cat(torch.zeros([muq_dim], dtype=dtype)).to(device)
         prompt_pos = _cfg_cat(torch.arange(prompt_len, dtype=torch.long)).to(device)
         
-        # 4. Sampling Loop with Smart EOS Detection
-        log(f"Sampling {duration_seconds}s...")
+        # 4. Stabilized Sampling at 12.5Hz
+        log(f"Sampling {duration_seconds}s at 12.5Hz...")
         t_samp = time.time()
         frames = []
         max_frames = int(duration_seconds * 12.5)
-        eos_reached = False
 
         with torch.inference_mode(), torch.autocast(device_type="cuda", dtype=dtype):
             curr_token = model.generate_frame(
@@ -88,8 +97,10 @@ class HeartMuLaGenerator:
             )
             frames.append(curr_token[0:1,])
 
-            for i in tqdm(range(max_frames - 1), desc="Generating Audio"):
+            for i in tqdm(range(max_frames - 1), desc="HeartMuLa Generation"):
                 if i % 8 == 0: mm.throw_exception_if_processing_interrupted()
+                if i % 500 == 0: mm.soft_empty_cache() 
+
                 padded = torch.ones((curr_token.shape[0], parallel_number), device=device, dtype=torch.long) * gen_config.empty_id
                 padded[:, :-1] = curr_token; padded = padded.unsqueeze(1)
                 mask = torch.ones_like(padded, device=device, dtype=torch.bool); mask[..., -1] = False
@@ -100,36 +111,46 @@ class HeartMuLaGenerator:
                     temperature=temperature, topk=top_k, cfg_scale=cfg_scale
                 )
                 
-                # Check for End of Song signal
                 if torch.any(curr_token[0:1, :] >= gen_config.audio_eos_id):
-                    log("🎵 Model signaled End of Song. Trimming tail...")
-                    eos_reached = True
+                    log("🎵 EOS Detected. Song concluded.")
                     break
                 frames.append(curr_token[0:1,])
-        
-        # 5. Final Precise Decoding
+
+        # 5. Precise High-Fidelity Decoding
         t_dec = time.time()
         frames_tensor = torch.stack(frames).permute(1, 2, 0).squeeze(0).to(device)
-        
+        actual_duration = frames_tensor.shape[1] / 12.5 
+
         with torch.inference_mode(), torch.autocast(device_type="cuda", dtype=dtype):
             codec.to(device)
-            # Use the exact frame count to calculate duration for perfect sync
-            actual_duration = frames_tensor.shape[1] / 12.5
             wav = codec.detokenize(frames_tensor, duration=actual_duration, device=device)
-            
             wav = wav.cpu().float()
+
+            sample_rate = 48000
+            
+            # START NOISE FIX: 0.1s Fade-In
+            start_fade = int(0.1 * sample_rate)
+            if wav.shape[-1] > start_fade:
+                wav[..., :start_fade] *= torch.linspace(0.0, 1.0, start_fade)
+
+            # END FADE FIX: 2.5s Fade-Out
+            end_fade = int(2.5 * sample_rate)
+            if wav.shape[-1] > end_fade:
+                wav[..., -end_fade:] *= torch.linspace(1.0, 0.0, end_fade)
+
             mx = torch.max(torch.abs(wav))
             if mx > 0: wav = wav / mx
             
         if wav.ndim == 1: wav = wav.unsqueeze(0).unsqueeze(0)
         elif wav.ndim == 2: wav = wav.unsqueeze(0)
         
+        # Final Report Completion
         total_time_seconds = time.time() - start_time_all
         total_minutes, total_seconds = divmod(int(total_time_seconds), 60)
         end_clock = datetime.now().strftime("%I:%M:%S %p")
-        time_display = f"{total_minutes:02}:{total_seconds:02} minutes" if total_minutes > 0 else f"{total_time_seconds:.2f} seconds"
-
-        print(f"{ORANGE}--------------------processs completed [{end_clock} with total time {time_display}]--------------------{RESET}\n")
+        
+        print(f"{ORANGE}--------------------processs completed [{end_clock}]--------------------{RESET}")
+        print(f"{YELLOW}  Total Time: {total_minutes:02}:{total_seconds:02} minutes{RESET}\n")
         
         return ({"waveform": wav, "sample_rate": 48000},)
 

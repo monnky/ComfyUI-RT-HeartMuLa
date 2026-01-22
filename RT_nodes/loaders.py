@@ -75,7 +75,7 @@ class HeartMuLaLoader:
         if precision == "bf16": load_dtype = torch.bfloat16
 
         bnb_config = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=load_dtype) if quantization == "4bit" else None
-        model = HeartMuLa.from_pretrained(model_path, quantization_config=bnb_config, torch_dtype=load_dtype, device_map="auto" if device == "cuda" else "cpu")
+        model = HeartMuLa.from_pretrained(model_path, quantization_config=bnb_config, torch_dtype=load_dtype, device_map={"": 0} if device == "cuda" else "cpu")
         
         if compile_model and device == "cuda":
             log("🚀 Compiling model...")
