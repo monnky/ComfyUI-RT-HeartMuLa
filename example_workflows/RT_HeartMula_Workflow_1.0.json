@@ -5,45 +5,6 @@
   "last_link_id": 28,
   "nodes": [
     {
-      "id": 19,
-      "type": "Text _O",
-      "pos": [
-        -357.409501179435,
-        87.73956054976865
-      ],
-      "size": [
-        424.0842210156278,
-        194.73157665283122
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": [
-            27
-          ]
-        }
-      ],
-      "title": "Manual Tags",
-      "properties": {
-        "cnr_id": "ComfyUI-QualityOfLifeSuit_Omar92",
-        "ver": "f09d10dea0afbd3984a284acf8f0913a634e36ec",
-        "Node name for S&R": "Text _O",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.5.2"
-        }
-      },
-      "widgets_values": [
-        "female, female singer, warm, reflection, pop, Cafe"
-      ]
-    },
-    {
       "id": 15,
       "type": "HeartMuLaInfo",
       "pos": [
@@ -55,7 +16,7 @@
         66
       ],
       "flags": {},
-      "order": 7,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -99,15 +60,15 @@
       "id": 10,
       "type": "HeartTranscriptorLoader",
       "pos": [
-        1379.2261817232609,
-        -469.98505083423834
+        1377.2917005162371,
+        -472.4031523430177
       ],
       "size": [
         329.9166625976562,
         82
       ],
       "flags": {},
-      "order": 1,
+      "order": 0,
       "mode": 4,
       "inputs": [],
       "outputs": [
@@ -138,15 +99,15 @@
       "id": 11,
       "type": "HeartTranscriptorRunner",
       "pos": [
-        1801.1416764833475,
-        -334.64607642005916
+        1799.2071952763238,
+        -337.06417792883855
       ],
       "size": [
         209.71666564941407,
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 5,
       "mode": 4,
       "inputs": [
         {
@@ -185,15 +146,15 @@
       "id": 13,
       "type": "ShowText|pysssss",
       "pos": [
-        2074.336691798704,
-        -584.1622137990372
+        2072.4022105916806,
+        -586.5803153078166
       ],
       "size": [
         824.9365024546014,
         551.0799735027326
       ],
       "flags": {},
-      "order": 9,
+      "order": 8,
       "mode": 4,
       "inputs": [
         {
@@ -221,22 +182,22 @@
         }
       },
       "widgets_values": [
-        "Hello there! Ready to elevate your content like never before? I'm excited to share an amazing service that brings hyper realistic AI avatars to life just like me. Pictured grabbing your audiences attention with eye catching visuals and smooth professional animations, lot perfectly customized to fit your brand. From promotional videos, to engaging social media clips, I ensure your message shines and leaves a lasting impression.\" Let's collaborate to create something unforgettable Let's do it!- Zappos!- Zappos! Zappos! Zappos! Zappos! Zappos! Zappos! Zappos! Zappos!"
+        "Hello there! "
       ]
     },
     {
       "id": 12,
       "type": "LoadAudio",
       "pos": [
-        1376.116132521863,
-        -252.28160673636307
+        1374.1816513148392,
+        -254.6997082451425
       ],
       "size": [
         346.80704794922644,
         136
       ],
       "flags": {},
-      "order": 2,
+      "order": 1,
       "mode": 4,
       "inputs": [],
       "outputs": [
@@ -265,6 +226,46 @@
       ]
     },
     {
+      "id": 23,
+      "type": "Reroute",
+      "pos": [
+        99.6568921780008,
+        -216.49834955853586
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 27
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "STRING",
+          "links": [
+            28
+          ]
+        }
+      ],
+      "properties": {
+        "showOutputText": false,
+        "horizontal": false,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.5.2",
+          "input_ue_unconnectable": {}
+        }
+      }
+    },
+    {
       "id": 2,
       "type": "HeartMuLaLoader",
       "pos": [
@@ -273,10 +274,10 @@
       ],
       "size": [
         425.5324682184429,
-        214
+        238
       ],
       "flags": {},
-      "order": 3,
+      "order": 2,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -324,48 +325,14 @@
       },
       "widgets_values": [
         "HeartMuLa-oss-3B",
-        "8bit",
+        "4bit",
+        "bf16",
         "bf16",
         "cuda",
-        false
+        true
       ],
       "color": "#432",
       "bgcolor": "#653"
-    },
-    {
-      "id": 23,
-      "type": "Reroute",
-      "pos": [
-        99.6568921780008,
-        -216.49834955853586
-      ],
-      "size": [
-        75,
-        26
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "",
-          "type": "*",
-          "link": 27
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "STRING",
-          "links": [
-            28
-          ]
-        }
-      ],
-      "properties": {
-        "showOutputText": false,
-        "horizontal": false
-      }
     },
     {
       "id": 6,
@@ -379,7 +346,7 @@
         186.72918243017784
       ],
       "flags": {},
-      "order": 4,
+      "order": 3,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -409,18 +376,138 @@
       ]
     },
     {
+      "id": 19,
+      "type": "Text _O",
+      "pos": [
+        -357.409501179435,
+        87.73956054976865
+      ],
+      "size": [
+        424.0842210156278,
+        194.73157665283122
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            27
+          ]
+        }
+      ],
+      "title": "Manual Tags",
+      "properties": {
+        "cnr_id": "ComfyUI-QualityOfLifeSuit_Omar92",
+        "ver": "f09d10dea0afbd3984a284acf8f0913a634e36ec",
+        "Node name for S&R": "Text _O",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "female, female singer, pop, jazz"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "ShowText|pysssss",
+      "pos": [
+        222.232896406444,
+        -663.5616128833534
+      ],
+      "size": [
+        577.6103684217715,
+        165.68727933828308
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "Node name for S&R": "ShowText|pysssss",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "Model: OptimizedModule (torch.bfloat16)\nCodec: HeartCodec (torch.bfloat16)\nDevice: cuda:0"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "SaveAudio",
+      "pos": [
+        835.1902531264684,
+        -632.4361033194791
+      ],
+      "size": [
+        387.7537195464063,
+        118.2418687472063
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 17
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "SaveAudio",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
       "id": 7,
       "type": "HeartMuLaGenerator",
       "pos": [
-        210.51477193722593,
-        -430.2007561864131
+        219.90121143196595,
+        -435.3478876147273
       ],
       "size": [
         579.6916688070646,
         725.3404961112097
       ],
       "flags": {},
-      "order": 8,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
@@ -469,95 +556,14 @@
         }
       },
       "widgets_values": [
-        "[Verse]\nSunlight spills across the scratched oak floor\nI’m not checking on the time anymore\nJust watching steam spiral up from the tea\nA quiet moment meant only for me\n\n[Chorus]\nIt’s a slow motion kind of afternoon\nHumming along to a coffee shop tune\nLet the traffic spin outside the glass\nWhile I let the heavy hours pass\n\n[Verse]\nA stranger smiles as they turn a fresh page\nWe’re all taking a break from the stage\nThe scent of roasted beans fills up the air\nSettling the dust of a worry or care\n\n[Bridge]\nI used to run until my lungs would burn\nNow I’m sitting still to live and learn\nJust breathing it in\n\n[Chorus]\nIt’s a slow motion kind of afternoon\nHumming along to a coffee shop tune\nLet the traffic spin outside the glass\nWhile I let the heavy hours pass\n\n[Outro]\nJust warmth in a cup\nNo need to look up",
+        "[Intro]\n\n[Verse]\nThe sun creeps in across the floor\nI hear the traffic outside the door\nThe coffee pot begins to hiss\nIt is another morning just like this\n\n[Prechorus]\nThe world keeps spinning round and round\nFeet are planted on the ground\nI find my rhythm in the sound\n\n[Chorus]\nEvery day the light returns\nEvery day the fire burns\nWe keep on walking down this street\nMoving to the same steady beat\nIt is the ordinary magic that we meet\n\n[Verse]\nThe hours tick deeply into noon\nChasing shadows,chasing the moon\nWork is done and the lights go low\nWatching the city start to glow\n\n[Bridge]\nIt is not always easy,not always bright\nSometimes we wrestle with the night\nBut we make it to the morning light\n\n[Chorus]\nEvery day the light returns\nEvery day the fire burns\nWe keep on walking down this street\nMoving to the same steady beat\n\n[Outro]\nJust another day\nEvery single day",
         false,
-        60,
-        1.7,
+        150,
+        1.5,
         1,
         50,
-        161359712185784,
+        63319618031563,
         "randomize"
-      ],
-      "color": "#432",
-      "bgcolor": "#653"
-    },
-    {
-      "id": 16,
-      "type": "ShowText|pysssss",
-      "pos": [
-        204.68026595479404,
-        -670.2399666691452
-      ],
-      "size": [
-        592.6366644398026,
-        175.70481001697078
-      ],
-      "flags": {},
-      "order": 10,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 21
-        }
-      ],
-      "outputs": [
-        {
-          "name": "STRING",
-          "shape": 6,
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfyui-custom-scripts",
-        "ver": "1.2.5",
-        "Node name for S&R": "ShowText|pysssss",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.5.2"
-        }
-      },
-      "widgets_values": [
-        "Model: OptimizedModule\nPrecision: torch.bfloat16\nDevice: cuda:0"
-      ]
-    },
-    {
-      "id": 14,
-      "type": "SaveAudio",
-      "pos": [
-        835.1902531264684,
-        -632.4361033194791
-      ],
-      "size": [
-        387.7537195464063,
-        118.2418687472063
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "audio",
-          "type": "AUDIO",
-          "link": 17
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.10.0",
-        "Node name for S&R": "SaveAudio",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.5.2"
-        }
-      },
-      "widgets_values": [
-        "audio/ComfyUI"
       ],
       "color": "#432",
       "bgcolor": "#653"
@@ -693,10 +699,10 @@
     },
     {
       "id": 2,
-      "title": "RT HeartMuLa Transcriptor",
+      "title": "HeartMuLa Transcriptor",
       "bounding": [
-        1288.945869522478,
-        -786.4477273924108,
+        1287.0113883154543,
+        -788.8658289011902,
         1904.24242424242,
         1117.373737373735
       ],
@@ -710,10 +716,10 @@
     "workflowRendererVersion": "LG",
     "ue_links": [],
     "ds": {
-      "scale": 0.30735605491428364,
+      "scale": 0.5989500000000023,
       "offset": [
-        1647.952780740956,
-        1461.678141357212
+        732.7747495876177,
+        948.6532854730366
       ]
     },
     "links_added_by_ue": [],
