@@ -10,7 +10,7 @@ Follow these steps to get **ComfyUI-RT-HeartMuLa** up and running.
 Open your terminal or command prompt, navigate to your `ComfyUI\custom_nodes` folder, and run:
 
 ```bash
-git clone [https://github.com/monnky/ComfyUI-RT-HeartMuLa](https://github.com/monnky/ComfyUI-RT-HeartMuLa)
+git clone https://github.com/monnky/ComfyUI-RT-HeartMuLa
 
 ```
 Step 2: Navigate to the Directory
