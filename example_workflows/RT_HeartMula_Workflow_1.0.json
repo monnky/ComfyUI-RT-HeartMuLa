@@ -1,0 +1,727 @@
+{
+  "id": "6ad0fdfd-89b0-4486-a30d-77e15df2a3d5",
+  "revision": 0,
+  "last_node_id": 23,
+  "last_link_id": 28,
+  "nodes": [
+    {
+      "id": 19,
+      "type": "Text _O",
+      "pos": [
+        -357.409501179435,
+        87.73956054976865
+      ],
+      "size": [
+        424.0842210156278,
+        194.73157665283122
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            27
+          ]
+        }
+      ],
+      "title": "Manual Tags",
+      "properties": {
+        "cnr_id": "ComfyUI-QualityOfLifeSuit_Omar92",
+        "ver": "f09d10dea0afbd3984a284acf8f0913a634e36ec",
+        "Node name for S&R": "Text _O",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "female, female singer, warm, reflection, pop, Cafe"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "HeartMuLaInfo",
+      "pos": [
+        -287.18170712368726,
+        -556.5237707392408
+      ],
+      "size": [
+        284.5164287825979,
+        66
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "HEARTMULA_MODEL",
+          "link": 18
+        },
+        {
+          "name": "codec",
+          "type": "HEART_CODEC",
+          "link": 19
+        },
+        {
+          "name": "gen_config",
+          "type": "HEART_GEN_CONFIG",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            21
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
+        "Node name for S&R": "HeartMuLaInfo",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 10,
+      "type": "HeartTranscriptorLoader",
+      "pos": [
+        1379.2261817232609,
+        -469.98505083423834
+      ],
+      "size": [
+        329.9166625976562,
+        82
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "transcriptor_pipe",
+          "type": "HEART_TRANSCRIPTOR",
+          "links": [
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
+        "Node name for S&R": "HeartTranscriptorLoader",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "HeartTranscriptor-oss",
+        "cuda"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "HeartTranscriptorRunner",
+      "pos": [
+        1801.1416764833475,
+        -334.64607642005916
+      ],
+      "size": [
+        209.71666564941407,
+        46
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "transcriptor_pipe",
+          "type": "HEART_TRANSCRIPTOR",
+          "link": 14
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 15
+        }
+      ],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            16
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
+        "Node name for S&R": "HeartTranscriptorRunner",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 13,
+      "type": "ShowText|pysssss",
+      "pos": [
+        2074.336691798704,
+        -584.1622137990372
+      ],
+      "size": [
+        824.9365024546014,
+        551.0799735027326
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 16
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "Node name for S&R": "ShowText|pysssss",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "Hello there! Ready to elevate your content like never before? I'm excited to share an amazing service that brings hyper realistic AI avatars to life just like me. Pictured grabbing your audiences attention with eye catching visuals and smooth professional animations, lot perfectly customized to fit your brand. From promotional videos, to engaging social media clips, I ensure your message shines and leaves a lasting impression.\" Let's collaborate to create something unforgettable Let's do it!- Zappos!- Zappos! Zappos! Zappos! Zappos! Zappos! Zappos! Zappos! Zappos!"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "LoadAudio",
+      "pos": [
+        1376.116132521863,
+        -252.28160673636307
+      ],
+      "size": [
+        346.80704794922644,
+        136
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            15
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "LoadAudio",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "02.wav",
+        null,
+        null
+      ]
+    },
+    {
+      "id": 2,
+      "type": "HeartMuLaLoader",
+      "pos": [
+        -358.84544469257224,
+        -430.83073589216554
+      ],
+      "size": [
+        425.5324682184429,
+        214
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "HEARTMULA_MODEL",
+          "links": [
+            7,
+            18
+          ]
+        },
+        {
+          "name": "tokenizer",
+          "type": "HEARTMULA_TOKENIZER",
+          "links": [
+            8
+          ]
+        },
+        {
+          "name": "codec",
+          "type": "HEART_CODEC",
+          "links": [
+            9,
+            19
+          ]
+        },
+        {
+          "name": "gen_config",
+          "type": "HEART_GEN_CONFIG",
+          "links": [
+            13,
+            20
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
+        "Node name for S&R": "HeartMuLaLoader",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "HeartMuLa-oss-3B",
+        "8bit",
+        "bf16",
+        "cuda",
+        false
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 23,
+      "type": "Reroute",
+      "pos": [
+        99.6568921780008,
+        -216.49834955853586
+      ],
+      "size": [
+        75,
+        26
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "",
+          "type": "*",
+          "link": 27
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "STRING",
+          "links": [
+            28
+          ]
+        }
+      ],
+      "properties": {
+        "showOutputText": false,
+        "horizontal": false
+      }
+    },
+    {
+      "id": 6,
+      "type": "HeartMuLaTagsBuilder",
+      "pos": [
+        -357.49371018515694,
+        -154.50142558578403
+      ],
+      "size": [
+        424.3194111232425,
+        186.72918243017784
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "tags",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
+        "Node name for S&R": "HeartMuLaTagsBuilder",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "folk",
+        "female vocal",
+        "energetic",
+        "medium",
+        "piano, guitar",
+        ""
+      ]
+    },
+    {
+      "id": 7,
+      "type": "HeartMuLaGenerator",
+      "pos": [
+        210.51477193722593,
+        -430.2007561864131
+      ],
+      "size": [
+        579.6916688070646,
+        725.3404961112097
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "HEARTMULA_MODEL",
+          "link": 7
+        },
+        {
+          "name": "tokenizer",
+          "type": "HEARTMULA_TOKENIZER",
+          "link": 8
+        },
+        {
+          "name": "codec",
+          "type": "HEART_CODEC",
+          "link": 9
+        },
+        {
+          "name": "gen_config",
+          "type": "HEART_GEN_CONFIG",
+          "link": 13
+        },
+        {
+          "name": "tags",
+          "type": "STRING",
+          "link": 28
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            17
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
+        "Node name for S&R": "HeartMuLaGenerator",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "[Verse]\nSunlight spills across the scratched oak floor\nI’m not checking on the time anymore\nJust watching steam spiral up from the tea\nA quiet moment meant only for me\n\n[Chorus]\nIt’s a slow motion kind of afternoon\nHumming along to a coffee shop tune\nLet the traffic spin outside the glass\nWhile I let the heavy hours pass\n\n[Verse]\nA stranger smiles as they turn a fresh page\nWe’re all taking a break from the stage\nThe scent of roasted beans fills up the air\nSettling the dust of a worry or care\n\n[Bridge]\nI used to run until my lungs would burn\nNow I’m sitting still to live and learn\nJust breathing it in\n\n[Chorus]\nIt’s a slow motion kind of afternoon\nHumming along to a coffee shop tune\nLet the traffic spin outside the glass\nWhile I let the heavy hours pass\n\n[Outro]\nJust warmth in a cup\nNo need to look up",
+        false,
+        60,
+        1.7,
+        1,
+        50,
+        161359712185784,
+        "randomize"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 16,
+      "type": "ShowText|pysssss",
+      "pos": [
+        204.68026595479404,
+        -670.2399666691452
+      ],
+      "size": [
+        592.6366644398026,
+        175.70481001697078
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-custom-scripts",
+        "ver": "1.2.5",
+        "Node name for S&R": "ShowText|pysssss",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "Model: OptimizedModule\nPrecision: torch.bfloat16\nDevice: cuda:0"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "SaveAudio",
+      "pos": [
+        835.1902531264684,
+        -632.4361033194791
+      ],
+      "size": [
+        387.7537195464063,
+        118.2418687472063
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 17
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "Node name for S&R": "SaveAudio",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "audio/ComfyUI"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    }
+  ],
+  "links": [
+    [
+      7,
+      2,
+      0,
+      7,
+      0,
+      "HEARTMULA_MODEL"
+    ],
+    [
+      8,
+      2,
+      1,
+      7,
+      1,
+      "HEARTMULA_TOKENIZER"
+    ],
+    [
+      9,
+      2,
+      2,
+      7,
+      2,
+      "HEART_CODEC"
+    ],
+    [
+      13,
+      2,
+      3,
+      7,
+      3,
+      "HEART_GEN_CONFIG"
+    ],
+    [
+      14,
+      10,
+      0,
+      11,
+      0,
+      "HEART_TRANSCRIPTOR"
+    ],
+    [
+      15,
+      12,
+      0,
+      11,
+      1,
+      "AUDIO"
+    ],
+    [
+      16,
+      11,
+      0,
+      13,
+      0,
+      "STRING"
+    ],
+    [
+      17,
+      7,
+      0,
+      14,
+      0,
+      "AUDIO"
+    ],
+    [
+      18,
+      2,
+      0,
+      15,
+      0,
+      "HEARTMULA_MODEL"
+    ],
+    [
+      19,
+      2,
+      2,
+      15,
+      1,
+      "HEART_CODEC"
+    ],
+    [
+      20,
+      2,
+      3,
+      15,
+      2,
+      "HEART_GEN_CONFIG"
+    ],
+    [
+      21,
+      15,
+      0,
+      16,
+      0,
+      "STRING"
+    ],
+    [
+      27,
+      19,
+      0,
+      23,
+      0,
+      "STRING"
+    ],
+    [
+      28,
+      23,
+      0,
+      7,
+      4,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "HeartMula Music Generator",
+      "bounding": [
+        -412.46236188282165,
+        -789.7763358575169,
+        1657.3400000000004,
+        1124.0955555555556
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "RT HeartMuLa Transcriptor",
+      "bounding": [
+        1288.945869522478,
+        -786.4477273924108,
+        1904.24242424242,
+        1117.373737373735
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "workflowRendererVersion": "LG",
+    "ue_links": [],
+    "ds": {
+      "scale": 0.30735605491428364,
+      "offset": [
+        1647.952780740956,
+        1461.678141357212
+      ]
+    },
+    "links_added_by_ue": [],
+    "frontendVersion": "1.37.11",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
