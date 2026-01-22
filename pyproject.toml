@@ -2,7 +2,7 @@
 name = "ComfyUI-RT-HeartMuLa"
 description = "RT HeartMuLa is a powerful suite of multilingual AI music generation nodes for ComfyUI that enables the creation of professional-quality full songs with lyrics directly on your local hardware. Leveraging the advanced HeartMuLa-3B foundation model, HeartCodec, and HeartTranscriptor, these nodes offer a high-fidelity, open-source alternative to cloud-based services for text-to-music and lyrics-to-audio workflows. Designed for creators seeking precise control over song structure and language—supporting English, Chinese, Japanese, Korean, and Spanish—it seamlessly integrates into the ComfyUI ecosystem to provide a state-of-the-art AI audio generation experience."
 version = "2.7.3"
-license = {file = "LICENSE"} 
+license = "Apache-2.0"
 # classifiers = [
 #     # For OS-independent nodes (works on all operating systems)
 #     "Operating System :: OS Independent",
