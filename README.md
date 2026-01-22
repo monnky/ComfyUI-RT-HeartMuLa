@@ -13,7 +13,7 @@ Open your terminal or command prompt, navigate to your `ComfyUI\custom_nodes` fo
 git clone https://github.com/monnky/ComfyUI-RT-HeartMuLa
 
 ```
-### Step 2: Navigate to the Directory
+### $${\color{yellow}Step \ 2: \ Navigate \ to \ the \ Directory}$$
 Change into the project folder:
 
 ```bash
@@ -21,7 +21,7 @@ cd ComfyUI-RT-HeartMuLa
 ```
 
 
-Step 3: Install Dependencies
+### $${\color{yellow}Step \ 3: \ Install \ Dependencies}$$
 
 First Try install only 3 dep's
 ```bash
