@@ -4,7 +4,7 @@ A custom node suite for ComfyUI.
 
 ![Model Files Location](assets/ui1.png)
 ---
-### Recommended Loader Settings
+### Recommended Loader Settings # $${\color{Green}First \ generate \ 20 \ seconds \ audio \ to \ check \ the \ quality}$$
 
 | GPU Tier | Target Use Case | Quantization | Precision (Mula / Codec) | Compile? | Explanation |
 | :--- | :--- | :--- | :--- | :--- | :--- |
