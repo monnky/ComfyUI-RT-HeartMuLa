@@ -49,6 +49,15 @@ Navigate to your `ComfyUI/models` directory and use the Hugging Face CLI to down
 # Navigate to models folder
 cd ComfyUI/models
 
+# Download model weights to specific local directories
+huggingface-cli download HeartMuLa/HeartMuLaGen --local-dir ./HeartMuLa
+huggingface-cli download HeartMuLa/HeartMuLa-oss-3B --local-dir ./HeartMuLa/HeartMuLa-oss-3B
+huggingface-cli download HeartMuLa/HeartCodec-oss --local-dir ./HeartMuLa/HeartCodec-oss
+huggingface-cli download HeartMuLa/HeartTranscriptor-oss --local-dir ./HeartMuLa/HeartTranscriptor-oss
+
+
+___
+
 ### $${\color{yellow}Model \ Sources}$$
 
 Explore the technical foundations and official repositories for the models used in this project:
@@ -70,8 +79,3 @@ Special thanks to the **HeartMuLa** team for providing the open-source weights a
 
 * **HeartMuLa Organization:** [Hugging Face Profile](https://huggingface.co/HeartMuLa)
 
-# Download model weights to specific local directories
-huggingface-cli download HeartMuLa/HeartMuLaGen --local-dir ./HeartMuLa
-huggingface-cli download HeartMuLa/HeartMuLa-oss-3B --local-dir ./HeartMuLa/HeartMuLa-oss-3B
-huggingface-cli download HeartMuLa/HeartCodec-oss --local-dir ./HeartMuLa/HeartCodec-oss
-huggingface-cli download HeartMuLa/HeartTranscriptor-oss --local-dir ./HeartMuLa/HeartTranscriptor-oss
