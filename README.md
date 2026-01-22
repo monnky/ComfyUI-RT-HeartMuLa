@@ -72,6 +72,7 @@ Explore the technical foundations and official repositories for the models used 
 * **Official Demo:** [HeartMuLa Project Page](https://heartmula.github.io/)
 
 #### **Hugging Face Model Hub:**
+* **HeartMuLaGen Config Files:** [HeartMuLaGen](https://huggingface.co/HeartMuLa/HeartMuLaGen/tree/main)
 * **Main Model (3B):** [HeartMuLa-oss-3B](https://huggingface.co/HeartMuLa/HeartMuLa-oss-3B)
 * **Codec:** [HeartCodec-oss](https://huggingface.co/HeartMuLa/HeartCodec-oss)
 * **Transcriptor:** [HeartTranscriptor-oss](https://huggingface.co/HeartMuLa/HeartTranscriptor-oss)
