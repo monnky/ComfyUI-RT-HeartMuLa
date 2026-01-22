@@ -6,14 +6,14 @@ A custom node suite for ComfyUI.
 
 Follow these steps to get **ComfyUI-RT-HeartMuLa** up and running.
 
-### Step 1: Clone the Repository
+### $${\color{yellow}Step \ 1: \ Clone \ the \ Repository}$$
 Open your terminal or command prompt, navigate to your `ComfyUI\custom_nodes` folder, and run:
 
 ```bash
 git clone https://github.com/monnky/ComfyUI-RT-HeartMuLa
 
 ```
-Step 2: Navigate to the Directory
+### Step 2: Navigate to the Directory
 Change into the project folder:
 
 ```bash
