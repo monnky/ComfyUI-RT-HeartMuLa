@@ -30,10 +30,17 @@ class HeartMuLaTagsBuilder:
         start_clock = datetime.now().strftime("%I:%M:%S %p")
         print(f"\n{ORANGE}--------------------process started [@ {start_clock}]--------------------{RESET}")
         
-        tags = [t for t in [genre, vocal_type, mood, tempo, instruments, additional_tags] if t and t != "none"]
-        return (", ".join(tags),)
+        # Paper Compliance: Tags must be lowercase and filtered for empty values
+        raw_tags = [genre, vocal_type, mood, tempo, instruments, additional_tags]
+        clean_tags = [str(t).lower().strip() for t in raw_tags if t and str(t).lower() != "none" and str(t).strip() != ""]
+        
+        # Join with commas as expected by the HeartMuLa cross-attention mechanism
+        formatted_tags = ", ".join(clean_tags)
+        
+        return (formatted_tags,)
 
     @classmethod
     def IS_CHANGED(s, **kwargs):
         # This forces the node to run every single time you hit Queue Prompt
+        # ensuring the 'process started' banner always appears
         return float("NaN")
