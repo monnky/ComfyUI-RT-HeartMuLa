@@ -34,7 +34,8 @@ class HeartMuLaLoader:
             "required": {
                 "model_name": (["HeartMuLa-oss-3B", "HeartMuLa-oss-7B"],),
                 "quantization": (["none", "4bit", "8bit"], {"default": "4bit"}),
-                "precision": (["auto", "fp16", "bf16", "fp32"], {"default": "auto"}),
+                "mula_precision": (["auto", "fp16", "bf16", "fp32"], {"default": "bf16"}),
+                "codec_precision": (["auto", "fp16", "bf16", "fp32"], {"default": "fp32"}),
                 "device": (["cuda", "cpu"], {"default": "cuda"}),
                 "compile_model": ("BOOLEAN", {"default": False}),
             }
@@ -45,17 +46,18 @@ class HeartMuLaLoader:
     FUNCTION = "load_model"
     CATEGORY = "HeartMuLa/Loaders"
 
-    def load_model(self, model_name, quantization, precision, device, compile_model):
+    def load_model(self, model_name, quantization, mula_precision, codec_precision, device, compile_model):
+        # Report the split configuration
         LAST_LOADER_INFO.update({
             "model_name": model_name, 
             "quant": quantization, 
-            "prec": precision, 
+            "prec": f"{mula_precision}/{codec_precision}", 
             "dev": device,
             "compiled": "ENABLED" if compile_model else "DISABLED"
         })
         
         mm.soft_empty_cache()
-        log(f"Loading {model_name}...")
+        log(f"Loading {model_name} (Mula: {mula_precision}, Codec: {codec_precision})...")
         
         base_path = os.path.join(folder_paths.models_dir, "HeartMuLa")
         model_path = os.path.join(base_path, model_name)
@@ -68,15 +70,34 @@ class HeartMuLaLoader:
         if not os.path.exists(vocab_path): vocab_path = os.path.join(base_path, "tokenizer.json")
         tokenizer = Tokenizer.from_file(vocab_path)
 
-        codec = HeartCodec.from_pretrained(codec_path).to(device)
-        if quantization != "none" and device == "cuda": codec = codec.half()
+        def get_dtype(p):
+            if p == "bf16": return torch.bfloat16
+            if p == "fp16": return torch.float16
+            if p == "fp32": return torch.float32
+            return torch.float16 if device == "cuda" else torch.float32
 
-        load_dtype = torch.float16 if precision == "fp16" or (precision=="auto" and device=="cuda") else torch.float32
-        if precision == "bf16": load_dtype = torch.bfloat16
+        mula_dtype = get_dtype(mula_precision)
+        codec_dtype = get_dtype(codec_precision)
 
-        bnb_config = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=load_dtype) if quantization == "4bit" else None
-        model = HeartMuLa.from_pretrained(model_path, quantization_config=bnb_config, torch_dtype=load_dtype, device_map={"": 0} if device == "cuda" else "cpu")
+        # FIX: Load Codec and force explicit dtype to avoid hanging during flow-matching
+        codec = HeartCodec.from_pretrained(codec_path).to(device).to(codec_dtype)
+        codec.eval() 
+
+        # Load HeartMuLa
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True, 
+            bnb_4bit_quant_type="nf4", 
+            bnb_4bit_compute_dtype=mula_dtype
+        ) if quantization == "4bit" else None
         
+        model = HeartMuLa.from_pretrained(
+            model_path, 
+            quantization_config=bnb_config, 
+            torch_dtype=mula_dtype, 
+            device_map={"": 0} if device == "cuda" else "cpu"
+        )
+        model.eval()
+
         if compile_model and device == "cuda":
             log("🚀 Compiling model...")
             model = torch.compile(model, mode="reduce-overhead")
@@ -91,4 +112,4 @@ class HeartMuLaInfo:
     FUNCTION = "get_info"
     CATEGORY = "HeartMuLa/Utils"
     def get_info(self, model, codec, gen_config):
-        return (f"Model: {type(model).__name__}\nPrecision: {model.dtype}\nDevice: {model.device}",)
+        return (f"Model: {type(model).__name__} ({model.dtype})\nCodec: {type(codec).__name__} ({codec.dtype})\nDevice: {model.device}",)

@@ -31,7 +31,7 @@ class HeartMuLaGenerator:
     def generate(self, model, tokenizer, codec, gen_config, lyrics, auto_clear_kv_cache, tags, duration_seconds, cfg_scale, temperature, top_k, seed):
         start_time_all = time.time()
         
-        # 1. FULL TECHNICAL DASHBOARD
+        # 1. Full Dashboard Report
         print_generation_dashboard([
             ("MODEL", LAST_LOADER_INFO.get('model_name', 'Active')),
             ("QUANT", LAST_LOADER_INFO.get('quant', 'N/A')),
@@ -52,7 +52,7 @@ class HeartMuLaGenerator:
         device, dtype = model.device, model.dtype
         torch.manual_seed(seed)
 
-        # 2. Preprocessing aligned with Paper Specs
+        # 2. Preprocessing
         tags_processed = f"<tag>{tags.lower().strip()}</tag>"
         def _encode(txt): return tokenizer.encode(txt).ids if hasattr(tokenizer, "encode") and hasattr(tokenizer.encode(txt), "ids") else tokenizer.encode(txt, add_special_tokens=False)
         tags_ids, lyrics_ids = _encode(tags_processed), _encode(lyrics.lower().strip())
@@ -62,22 +62,32 @@ class HeartMuLaGenerator:
             if ids[-1] != gen_config.text_eos_id: ids.append(gen_config.text_eos_id)
 
         prompt_len = len(tags_ids) + 1 + len(lyrics_ids)
-        parallel_number = 9 # HeartCodec Spec: 8 RVQ + 1 semantic
+        parallel_number = 9 
         
-        # 3. Model & Cache Initialization
-        bs_size = 2 if cfg_scale != 1.0 else 1
-        if hasattr(model, "setup_caches"): model.setup_caches(bs_size)
+        # 3. CRITICAL: HARD CACHE RESET
+        bs_size = 2 if cfg_scale > 1.0 else 1
+        
+        # Force-delete existing cache to prevent batch mismatch
+        if hasattr(model, "backbone") and hasattr(model.backbone, "layers"):
+            for layer in model.backbone.layers:
+                if hasattr(layer.attn, "kv_cache"):
+                    layer.attn.kv_cache = None 
+        
+        # Re-initialize for the NEW batch size
+        if hasattr(model, "setup_caches"): 
+            model.setup_caches(bs_size)
+            
         if auto_clear_kv_cache and hasattr(model, "reset_caches"):
             try: model.reset_caches()
             except: pass
 
-        def _cfg_cat(t): return torch.cat([t.unsqueeze(0)] * bs_size, dim=0)
+        def _cfg_cat(t): 
+            return torch.cat([t.unsqueeze(0)] * bs_size, dim=0)
         
         tokens = torch.zeros([prompt_len, parallel_number], dtype=torch.long)
         tokens[:len(tags_ids), -1] = torch.tensor(tags_ids)
         tokens[len(tags_ids) + 1:, -1] = torch.tensor(lyrics_ids)
         
-        # FIX: Removed semicolon and separated statements (E702)
         tokens_mask = torch.zeros_like(tokens, dtype=torch.bool)
         tokens_mask[:, -1] = True
         
@@ -86,8 +96,8 @@ class HeartMuLaGenerator:
         continuous_segment = _cfg_cat(torch.zeros([muq_dim], dtype=dtype)).to(device)
         prompt_pos = _cfg_cat(torch.arange(prompt_len, dtype=torch.long)).to(device)
         
-        # 4. Sampling Loop with KV-Cache Alignment
-        log(f"Sampling {duration_seconds}s at 12.5Hz...")
+        # 4. Sampling Loop
+        log(f"Sampling {duration_seconds}s at 12.5Hz (Batch Size: {bs_size})...")
         frames = []
         max_frames = int(duration_seconds * 12.5)
 
@@ -104,8 +114,6 @@ class HeartMuLaGenerator:
                 if i % 500 == 0: mm.soft_empty_cache() 
 
                 padded = torch.ones((curr_token.shape[0], parallel_number), device=device, dtype=torch.long) * gen_config.empty_id
-                
-                # FIX: Removed semicolons and separated statements (E702)
                 padded[:, :-1] = curr_token
                 padded = padded.unsqueeze(1)
                 
@@ -119,11 +127,11 @@ class HeartMuLaGenerator:
                 )
                 
                 if torch.any(curr_token[0:1, :] >= gen_config.audio_eos_id):
-                    log("🎵 EOS Detected. Song concluded.")
+                    log("🎵 EOS Detected. Song concluded naturally.")
                     break
                 frames.append(curr_token[0:1,])
 
-        # 5. Decoding and Fade-Out
+        # 5. Decoding
         frames_tensor = torch.stack(frames).permute(1, 2, 0).squeeze(0).to(device)
         actual_duration = frames_tensor.shape[1] / 12.5 
 
@@ -133,8 +141,6 @@ class HeartMuLaGenerator:
             wav = wav.cpu().float()
 
             sample_rate = 48000
-            
-            # Start/End Fades for Paper-compliant noise reduction
             start_fade = int(0.1 * sample_rate)
             if wav.shape[-1] > start_fade:
                 wav[..., :start_fade] *= torch.linspace(0.0, 1.0, start_fade)
