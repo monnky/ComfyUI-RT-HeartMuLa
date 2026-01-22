@@ -1,4 +1,4 @@
-# ComfyUI-RT-HeartMuLa
+# $${\color{white}ComfyUI-}{\color{orange}R}{\color{yellow}T}{\color{white}-HeartMuLa}$$
 
 A custom node suite for ComfyUI.
 
