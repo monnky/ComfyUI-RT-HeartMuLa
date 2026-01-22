@@ -44,17 +44,25 @@ pip install -r requirements.txt
 Navigate to your `ComfyUI/models` directory and use the Hugging Face CLI to download the required weights.
 
 > [!TIP]
-> Ensure you have the Hugging Face CLI installed (`pip install huggingface_hub`).
+> Ensure you have the [git-lfs-windows.exe](https://git-lfs.com/) installed.
+> Run the Installer: Double-click the downloaded git-lfs-windows.exe file and follow the setup wizard prompts.
 
 ```bash
-# Navigate to models folder
-cd ComfyUI/models
+# Go to ComfyUI/models folder and open CMD
 
-# Download model weights to specific local directories
-huggingface-cli download HeartMuLa/HeartMuLaGen --local-dir ./HeartMuLa
-huggingface-cli download HeartMuLa/HeartMuLa-oss-3B --local-dir ./HeartMuLa/HeartMuLa-oss-3B
-huggingface-cli download HeartMuLa/HeartCodec-oss --local-dir ./HeartMuLa/HeartCodec-oss
-huggingface-cli download HeartMuLa/HeartTranscriptor-oss --local-dir ./HeartMuLa/HeartTranscriptor-oss
+# Initialize LFS: Open Git Bash (or your preferred terminal) and run:
+git lfs install
+
+# 1. Clone the main Generation repo
+git clone https://huggingface.co/HeartMuLa/HeartMuLaGen HeartMuLa
+
+# 2. Navigate into the directory to clone the components
+cd HeartMuLa
+
+# 3. Clone the specific model components into subdirectories
+git clone https://huggingface.co/HeartMuLa/HeartMuLa-oss-3B
+git clone https://huggingface.co/HeartMuLa/HeartCodec-oss
+git clone https://huggingface.co/HeartMuLa/HeartTranscriptor-oss
 ```
 ___
 
