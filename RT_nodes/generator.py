@@ -39,8 +39,8 @@ class HeartMuLaGenerator:
             ("COMPILE", LAST_LOADER_INFO.get('compiled', 'DISABLED')),
             ("DEVICE", str(model.device)),
             ("FRAME RATE", "12.5 Hz (HeartCodec Spec)"),
-            ("ARCHITECTURE", "Hierarchical (Global/Local)"),
-            ("DURATION", f"{duration_seconds}s (Max)"),
+            ("ARCHITECTURE", "Hierarchical"),
+            ("DURATION", f"{duration_seconds}s"),
             ("CFG SCALE", str(cfg_scale)),
             ("TEMP", str(temperature)),
             ("TOP_K", str(top_k)),
@@ -64,16 +64,13 @@ class HeartMuLaGenerator:
         prompt_len = len(tags_ids) + 1 + len(lyrics_ids)
         parallel_number = 9 
         
-        # 3. CRITICAL: HARD CACHE RESET
+        # 3. Cache Reset Logic
         bs_size = 2 if cfg_scale > 1.0 else 1
-        
-        # Force-delete existing cache to prevent batch mismatch
         if hasattr(model, "backbone") and hasattr(model.backbone, "layers"):
             for layer in model.backbone.layers:
                 if hasattr(layer.attn, "kv_cache"):
                     layer.attn.kv_cache = None 
         
-        # Re-initialize for the NEW batch size
         if hasattr(model, "setup_caches"): 
             model.setup_caches(bs_size)
             
@@ -81,8 +78,7 @@ class HeartMuLaGenerator:
             try: model.reset_caches()
             except: pass
 
-        def _cfg_cat(t): 
-            return torch.cat([t.unsqueeze(0)] * bs_size, dim=0)
+        def _cfg_cat(t): return torch.cat([t.unsqueeze(0)] * bs_size, dim=0)
         
         tokens = torch.zeros([prompt_len, parallel_number], dtype=torch.long)
         tokens[:len(tags_ids), -1] = torch.tensor(tags_ids)
@@ -96,8 +92,8 @@ class HeartMuLaGenerator:
         continuous_segment = _cfg_cat(torch.zeros([muq_dim], dtype=dtype)).to(device)
         prompt_pos = _cfg_cat(torch.arange(prompt_len, dtype=torch.long)).to(device)
         
-        # 4. Sampling Loop
-        log(f"Sampling {duration_seconds}s at 12.5Hz (Batch Size: {bs_size})...")
+        # 4. Long-Form Optimized Sampling Loop
+        log(f"Sampling {duration_seconds}s at 12.5Hz...")
         frames = []
         max_frames = int(duration_seconds * 12.5)
 
@@ -111,7 +107,9 @@ class HeartMuLaGenerator:
 
             for i in tqdm(range(max_frames - 1), desc="HeartMuLa Generation"):
                 if i % 8 == 0: mm.throw_exception_if_processing_interrupted()
-                if i % 500 == 0: mm.soft_empty_cache() 
+                
+                # STABILITY FIX: Aggressive cache management for long tracks
+                if i % 250 == 0: mm.soft_empty_cache() 
 
                 padded = torch.ones((curr_token.shape[0], parallel_number), device=device, dtype=torch.long) * gen_config.empty_id
                 padded[:, :-1] = curr_token
@@ -120,10 +118,13 @@ class HeartMuLaGenerator:
                 mask = torch.ones_like(padded, device=device, dtype=torch.bool)
                 mask[..., -1] = False
                 
+                # TEMPERATURE STABILITY: Subtle decay to prevent late-song hallucinations
+                current_temp = max(0.8, temperature * (0.9999 ** i))
+
                 curr_token = model.generate_frame(
                     tokens=padded, tokens_mask=mask,
                     input_pos=prompt_pos[..., -1:] + i + 1,
-                    temperature=temperature, topk=top_k, cfg_scale=cfg_scale
+                    temperature=current_temp, topk=top_k, cfg_scale=cfg_scale
                 )
                 
                 if torch.any(curr_token[0:1, :] >= gen_config.audio_eos_id):
