@@ -43,7 +43,7 @@ pip install -r requirements.txt
 Navigate to your `ComfyUI/models` directory and use the Hugging Face CLI to download the required weights.
 
 > [!TIP]
-> Ensure you have the Hugging Face CLI installed (`pip install huggingface_hub`) and are logged in (`huggingface-cli login`).
+> Ensure you have the Hugging Face CLI installed (`pip install huggingface_hub`).
 
 ```bash
 # Navigate to models folder
