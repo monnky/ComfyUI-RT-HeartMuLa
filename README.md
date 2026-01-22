@@ -30,7 +30,7 @@ pip install torchtune
 pip install torchao
 ```
 
-(if doesnt work, install all requirments)
+(if doesnt work, install all requirements)
 Install the required Python packages:
 
 ```bash
