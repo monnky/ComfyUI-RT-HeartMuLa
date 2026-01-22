@@ -10,15 +10,13 @@ class HeartMuLaGenerator:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "model": ("HEARTMULA_MODEL",), 
-                "tokenizer": ("HEARTMULA_TOKENIZER",),
-                "codec": ("HEART_CODEC",), 
-                "gen_config": ("HEART_GEN_CONFIG",),
+                "model": ("HEARTMULA_MODEL",), "tokenizer": ("HEARTMULA_TOKENIZER",),
+                "codec": ("HEART_CODEC",), "gen_config": ("HEART_GEN_CONFIG",),
                 "lyrics": ("STRING", {"multiline": True, "default": "[Verse]"}),
                 "auto_clear_kv_cache": ("BOOLEAN", {"default": True}),
                 "tags": ("STRING", {"multiline": True, "forceInput": True}),
-                "duration_seconds": ("INT", {"default": 30, "min": 10, "max": 300, "step": 10}), 
-                "cfg_scale": ("FLOAT", {"default": 1.0, "min": 1.0, "max": 5.0}),
+                "duration_seconds": ("INT", {"default": 240, "min": 10, "max": 600, "step": 10}), 
+                "cfg_scale": ("FLOAT", {"default": 1.7, "min": 1.0, "max": 5.0}),
                 "temperature": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 2.0}),
                 "top_k": ("INT", {"default": 50, "min": 0, "max": 200}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
@@ -30,22 +28,16 @@ class HeartMuLaGenerator:
     CATEGORY = "HeartMuLa/Generation"
 
     def generate(self, model, tokenizer, codec, gen_config, lyrics, auto_clear_kv_cache, tags, duration_seconds, cfg_scale, temperature, top_k, seed):
-        # Master timer for the total time calculation
         start_time_all = time.time()
-
-        # 1. Full Dashboard Report (Restored with all parameters)
+        
+        # 1. Technical Report
         print_generation_dashboard([
             ("MODEL", LAST_LOADER_INFO.get('model_name', 'Active')),
             ("QUANT", LAST_LOADER_INFO.get('quant', 'N/A')),
             ("PRECISION", LAST_LOADER_INFO.get('prec', 'N/A')),
-            ("COMPILE", LAST_LOADER_INFO.get('compiled', 'DISABLED')),
-            ("DEVICE", str(model.device)),
             ("DURATION", f"{duration_seconds}s"),
             ("CFG SCALE", str(cfg_scale)),
-            ("TEMP", str(temperature)),
-            ("TOP_K", str(top_k)),
-            ("SEED", str(seed)),
-            ("TAGS", tags.replace("\n", " ").strip()[:60] + "...")
+            ("SEED", str(seed))
         ])
 
         mm.soft_empty_cache()
@@ -53,12 +45,8 @@ class HeartMuLaGenerator:
         torch.manual_seed(seed)
 
         # 2. Text Preprocessing
-        t_step = time.time()
         tags_processed = f"<tag>{tags.lower().strip()}</tag>"
-        def _encode(txt):
-            if hasattr(tokenizer, "encode") and hasattr(tokenizer.encode(txt), "ids"): 
-                return tokenizer.encode(txt).ids
-            return tokenizer.encode(txt, add_special_tokens=False)
+        def _encode(txt): return tokenizer.encode(txt).ids if hasattr(tokenizer, "encode") and hasattr(tokenizer.encode(txt), "ids") else tokenizer.encode(txt, add_special_tokens=False)
         tags_ids, lyrics_ids = _encode(tags_processed), _encode(lyrics.lower().strip())
 
         for ids in [tags_ids, lyrics_ids]:
@@ -71,13 +59,10 @@ class HeartMuLaGenerator:
         tokens[:len(tags_ids), -1] = torch.tensor(tags_ids)
         tokens[len(tags_ids) + 1:, -1] = torch.tensor(lyrics_ids)
         tokens_mask = torch.zeros_like(tokens, dtype=torch.bool); tokens_mask[:, -1] = True
-        log(f"⏱️ Preprocessing completed in {time.time() - t_step:.2f}s")
 
-        # 3. Cache Flush
+        # 3. Model Setup
         if auto_clear_kv_cache and hasattr(model, "reset_caches"):
-            t_flush = time.time()
             model.reset_caches()
-            log(f"🧹 KV Cache flushed in {time.time() - t_flush:.2f}s")
 
         bs_size = 2 if cfg_scale != 1.0 else 1
         if hasattr(model, "setup_caches"): model.setup_caches(bs_size)
@@ -88,13 +73,14 @@ class HeartMuLaGenerator:
         continuous_segment = _cfg_cat(torch.zeros([muq_dim], dtype=dtype)).to(device)
         prompt_pos = _cfg_cat(torch.arange(prompt_len, dtype=torch.long)).to(device)
         
-        # 4. Sampling
+        # 4. Sampling Loop with Smart EOS Detection
         log(f"Sampling {duration_seconds}s...")
         t_samp = time.time()
         frames = []
         max_frames = int(duration_seconds * 12.5)
+        eos_reached = False
 
-        with torch.inference_mode(), torch.autocast(device_type="cuda" if "cuda" in str(device) else "cpu", dtype=dtype):
+        with torch.inference_mode(), torch.autocast(device_type="cuda", dtype=dtype):
             curr_token = model.generate_frame(
                 tokens=prompt_tokens, tokens_mask=prompt_tokens_mask, input_pos=prompt_pos,
                 temperature=temperature, topk=top_k, cfg_scale=cfg_scale,
@@ -107,38 +93,42 @@ class HeartMuLaGenerator:
                 padded = torch.ones((curr_token.shape[0], parallel_number), device=device, dtype=torch.long) * gen_config.empty_id
                 padded[:, :-1] = curr_token; padded = padded.unsqueeze(1)
                 mask = torch.ones_like(padded, device=device, dtype=torch.bool); mask[..., -1] = False
-                curr_token = model.generate_frame(tokens=padded, tokens_mask=mask, input_pos=prompt_pos[..., -1:] + i + 1, temperature=temperature, topk=top_k, cfg_scale=cfg_scale)
-                if torch.any(curr_token[0:1, :] >= gen_config.audio_eos_id): break
+                
+                curr_token = model.generate_frame(
+                    tokens=padded, tokens_mask=mask,
+                    input_pos=prompt_pos[..., -1:] + i + 1,
+                    temperature=temperature, topk=top_k, cfg_scale=cfg_scale
+                )
+                
+                # Check for End of Song signal
+                if torch.any(curr_token[0:1, :] >= gen_config.audio_eos_id):
+                    log("🎵 Model signaled End of Song. Trimming tail...")
+                    eos_reached = True
+                    break
                 frames.append(curr_token[0:1,])
-        log(f"✅ Sampling completed in {time.time() - t_samp:.2f}s")
-
-        # 5. Decoding (Precision Fix)
+        
+        # 5. Final Precise Decoding
         t_dec = time.time()
-        log("Decoding wav...")
-        frames_tensor = torch.stack(frames).permute(1, 2, 0).squeeze(0)
-        if frames_tensor.shape[1] > max_frames: frames_tensor = frames_tensor[:, :max_frames]
-        elif frames_tensor.shape[1] < max_frames:
-            padding = torch.full((frames_tensor.shape[0], max_frames - frames_tensor.shape[1]), gen_config.empty_id, device=device, dtype=torch.long)
-            frames_tensor = torch.cat([frames_tensor, padding], dim=1)
-
-        with torch.inference_mode(), torch.autocast(device_type="cuda" if "cuda" in str(device) else "cpu", dtype=dtype):
-            if hasattr(codec, "detokenize"):
-                wav = codec.detokenize(frames_tensor, duration=duration_seconds, device=device)
-            else:
-                wav = codec.decode(frames_tensor.unsqueeze(0))
+        frames_tensor = torch.stack(frames).permute(1, 2, 0).squeeze(0).to(device)
+        
+        with torch.inference_mode(), torch.autocast(device_type="cuda", dtype=dtype):
+            codec.to(device)
+            # Use the exact frame count to calculate duration for perfect sync
+            actual_duration = frames_tensor.shape[1] / 12.5
+            wav = codec.detokenize(frames_tensor, duration=actual_duration, device=device)
+            
             wav = wav.cpu().float()
-            if torch.max(torch.abs(wav)) > 0: wav = wav / torch.max(torch.abs(wav))
+            mx = torch.max(torch.abs(wav))
+            if mx > 0: wav = wav / mx
             
         if wav.ndim == 1: wav = wav.unsqueeze(0).unsqueeze(0)
         elif wav.ndim == 2: wav = wav.unsqueeze(0)
-        log(f"🎹 Decoding completed in {time.time() - t_dec:.2f}s")
-
-        # Final Time Format
+        
         total_time_seconds = time.time() - start_time_all
-        total_minutes = int(total_time_seconds // 60)
-        total_seconds = int(total_time_seconds % 60)
+        total_minutes, total_seconds = divmod(int(total_time_seconds), 60)
         end_clock = datetime.now().strftime("%I:%M:%S %p")
-        time_display = f"{total_minutes:02}:{total_seconds:02} minutes" if total_minutes > 0 else f"{int(total_time_seconds)} seconds"
+        time_display = f"{total_minutes:02}:{total_seconds:02} minutes" if total_minutes > 0 else f"{total_time_seconds:.2f} seconds"
+
         print(f"{ORANGE}--------------------processs completed [{end_clock} with total time {time_display}]--------------------{RESET}\n")
         
         return ({"waveform": wav, "sample_rate": 48000},)
