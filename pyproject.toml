@@ -1,7 +1,7 @@
 [project]
 name = "ComfyUI-RT-HeartMuLa"
 description = "RT HeartMuLa is a powerful suite of multilingual AI music generation nodes for ComfyUI that enables the creation of professional-quality full songs with lyrics directly on your local hardware."
-version = "1.0.6"
+version = "1.0.9"
 license = {file = "LICENSE"} 
 dependencies = ["torchtune>=0.4.0", "torchao>=0.9.0", "soundfile", "vector_quantize_pytorch", "transformers>=4.45.0", "einops>=0.8.0", "safetensors>=0.4.0", "sentencepiece>=0.2.0", "accelerate>=1.0.0", "numpy", "protobuf", "omegaconf"]
 
@@ -15,6 +15,7 @@ Documentation = "https://github.com/monnky/ComfyUI-RT-HeartMuLa/wiki"
 PublisherId = "monnky"
 DisplayName = "ComfyUI-RT-HeartMuLa"
 Icon = "https://avatars.githubusercontent.com/u/76058285"
+
 
 
 
