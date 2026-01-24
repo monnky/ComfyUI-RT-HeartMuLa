@@ -71,21 +71,38 @@ Navigate to your `ComfyUI/models` directory and download the required weights.
 > Run the Installer: Double-click the downloaded git-lfs-windows.exe file and follow the setup wizard prompts.
 
 ```bash
-# Go to ComfyUI/models folder and open CMD
+# 1. Go to ComfyUI/models folder and open CMD
+cd ComfyUI/models
 
-# Initialize LFS: Open Git Bash (or your preferred terminal) and run:
+# 2. Initialize LFS (Crucial for downloading large model files)
 git lfs install
 
-# 1. Clone the main Generation repo
+# 3. Clone the main Generation repo wrapper
 git clone https://huggingface.co/HeartMuLa/HeartMuLaGen HeartMuLa
 
-# 2. Navigate into the directory to clone the components
+# 4. Enter the directory
 cd HeartMuLa
 
-# 3. Clone the specific model components into subdirectories
+# 5. Clone the NEW Jan 23, 2026 Components: (Clone components into subdirectories)
+# New RL-Tuned Model (3B)
+git clone https://huggingface.co/HeartMuLa/HeartMuLa-RL-oss-3B-20260123
+
+# New Codec
+git clone https://huggingface.co/HeartMuLa/HeartCodec-oss-20260123
+```
+---
+### $${\color{yellow}optional \ only \ download \ if \ you \ want}$$
+```bash
+
+# Transcriptor
+git clone https://huggingface.co/HeartMuLa/HeartTranscriptor-oss
+
+---------------------------------------------
+old models 
 git clone https://huggingface.co/HeartMuLa/HeartMuLa-oss-3B
 git clone https://huggingface.co/HeartMuLa/HeartCodec-oss
-git clone https://huggingface.co/HeartMuLa/HeartTranscriptor-oss
+
+
 ```
 ___
 
@@ -120,6 +137,10 @@ Special thanks to the **HeartMuLa** team for providing the open-source weights a
 ---
 # Changelog
 
+## [1.09] - 2026-01-24
+### Updated
+- **Model Weights**: Updated core model and codec files to the latest versions (20260124) for improved adherence and stability.
+
 ## [1.06]
 ### Fixed
 - **CFG Scale Crash**: Fixed a critical "Batch Size Mismatch" error when switching between CFG 1.0 and higher values. Implemented a hard KV-Cache reset to synchronize batch dimensions.
@@ -130,11 +151,11 @@ Special thanks to the **HeartMuLa** team for providing the open-source weights a
 - **Long-Form Audio**: Improved audio clarity for 4-minute tracks by implementing **Temperature Decay** and aggressive VRAM cache cleanup to prevent robotic artifacts.
 - **Tag Compliance**: Updated conditioning nodes to strictly enforce lowercase and comma-separated tag formatting as required by the paper.
 
-## [1.1]
+## [1.01]
 ### Added
 - Split codec support (Dual Precision for Model/Decoder)
 
-## [1.0]
+## [1.00]
 ### Initial Release
 - First public release
 
