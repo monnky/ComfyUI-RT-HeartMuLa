@@ -5,58 +5,6 @@
   "last_link_id": 28,
   "nodes": [
     {
-      "id": 15,
-      "type": "HeartMuLaInfo",
-      "pos": [
-        -287.18170712368726,
-        -556.5237707392408
-      ],
-      "size": [
-        284.5164287825979,
-        66
-      ],
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "model",
-          "type": "HEARTMULA_MODEL",
-          "link": 18
-        },
-        {
-          "name": "codec",
-          "type": "HEART_CODEC",
-          "link": 19
-        },
-        {
-          "name": "gen_config",
-          "type": "HEART_GEN_CONFIG",
-          "link": 20
-        }
-      ],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": [
-            21
-          ]
-        }
-      ],
-      "properties": {
-        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
-        "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
-        "Node name for S&R": "HeartMuLaInfo",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.5.2"
-        }
-      },
-      "widgets_values": []
-    },
-    {
       "id": 10,
       "type": "HeartTranscriptorLoader",
       "pos": [
@@ -81,9 +29,10 @@
         }
       ],
       "properties": {
-        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "cnr_id": "ComfyUI-RT-HeartMuLa",
         "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
         "Node name for S&R": "HeartTranscriptorLoader",
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
@@ -131,9 +80,10 @@
         }
       ],
       "properties": {
-        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "cnr_id": "ComfyUI-RT-HeartMuLa",
         "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
         "Node name for S&R": "HeartTranscriptorRunner",
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
@@ -269,12 +219,12 @@
       "id": 2,
       "type": "HeartMuLaLoader",
       "pos": [
-        -358.84544469257224,
-        -430.83073589216554
+        -355.0822851588804,
+        -482.26058285262087
       ],
       "size": [
         425.5324682184429,
-        238
+        262
       ],
       "flags": {},
       "order": 2,
@@ -314,9 +264,10 @@
         }
       ],
       "properties": {
-        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "cnr_id": "ComfyUI-RT-HeartMuLa",
         "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
         "Node name for S&R": "HeartMuLaLoader",
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
@@ -324,95 +275,16 @@
         }
       },
       "widgets_values": [
-        "HeartMuLa-oss-3B",
+        "HeartMuLa-RL-oss-3B-20260123",
+        "HeartCodec-oss-20260123",
         "4bit",
         "bf16",
         "bf16",
         "cuda",
-        true
+        false
       ],
       "color": "#432",
       "bgcolor": "#653"
-    },
-    {
-      "id": 6,
-      "type": "HeartMuLaTagsBuilder",
-      "pos": [
-        -357.49371018515694,
-        -154.50142558578403
-      ],
-      "size": [
-        424.3194111232425,
-        186.72918243017784
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "tags",
-          "type": "STRING",
-          "links": []
-        }
-      ],
-      "properties": {
-        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
-        "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
-        "Node name for S&R": "HeartMuLaTagsBuilder",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.5.2"
-        }
-      },
-      "widgets_values": [
-        "folk",
-        "female vocal",
-        "energetic",
-        "medium",
-        "piano, guitar",
-        ""
-      ]
-    },
-    {
-      "id": 19,
-      "type": "Text _O",
-      "pos": [
-        -357.409501179435,
-        87.73956054976865
-      ],
-      "size": [
-        424.0842210156278,
-        194.73157665283122
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": [
-            27
-          ]
-        }
-      ],
-      "title": "Manual Tags",
-      "properties": {
-        "cnr_id": "ComfyUI-QualityOfLifeSuit_Omar92",
-        "ver": "f09d10dea0afbd3984a284acf8f0913a634e36ec",
-        "Node name for S&R": "Text _O",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.5.2"
-        }
-      },
-      "widgets_values": [
-        "female, female singer, pop, jazz"
-      ]
     },
     {
       "id": 16,
@@ -455,14 +327,156 @@
       },
       "widgets_values": [
         "Model: OptimizedModule (torch.bfloat16)\nCodec: HeartCodec (torch.bfloat16)\nDevice: cuda:0"
-      ]
+      ],
+      "color": "#233",
+      "bgcolor": "#355"
+    },
+    {
+      "id": 15,
+      "type": "HeartMuLaInfo",
+      "pos": [
+        -282.1641610787648,
+        -612.9711637446183
+      ],
+      "size": [
+        284.5164287825979,
+        66
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "HEARTMULA_MODEL",
+          "link": 18
+        },
+        {
+          "name": "codec",
+          "type": "HEART_CODEC",
+          "link": 19
+        },
+        {
+          "name": "gen_config",
+          "type": "HEART_GEN_CONFIG",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            21
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "ComfyUI-RT-HeartMuLa",
+        "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
+        "Node name for S&R": "HeartMuLaInfo",
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [],
+      "color": "#233",
+      "bgcolor": "#355"
+    },
+    {
+      "id": 6,
+      "type": "HeartMuLaTagsBuilder",
+      "pos": [
+        -357.49371018515694,
+        -154.50142558578403
+      ],
+      "size": [
+        424.3194111232425,
+        186.72918243017784
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "tags",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "ComfyUI-RT-HeartMuLa",
+        "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
+        "Node name for S&R": "HeartMuLaTagsBuilder",
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "folk",
+        "female vocal",
+        "energetic",
+        "medium",
+        "piano, guitar",
+        "pop, jazz"
+      ],
+      "color": "#233",
+      "bgcolor": "#355"
+    },
+    {
+      "id": 19,
+      "type": "Text _O",
+      "pos": [
+        -357.409501179435,
+        87.73956054976865
+      ],
+      "size": [
+        424.0842210156278,
+        194.73157665283122
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            27
+          ]
+        }
+      ],
+      "title": "Manual Tags",
+      "properties": {
+        "cnr_id": "ComfyUI-QualityOfLifeSuit_Omar92",
+        "ver": "f09d10dea0afbd3984a284acf8f0913a634e36ec",
+        "Node name for S&R": "Text _O",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.5.2"
+        }
+      },
+      "widgets_values": [
+        "female, female singer, pop, jazz"
+      ],
+      "color": "#233",
+      "bgcolor": "#355"
     },
     {
       "id": 14,
       "type": "SaveAudio",
       "pos": [
         835.1902531264684,
-        -632.4361033194791
+        -636.1992628531709
       ],
       "size": [
         387.7537195464063,
@@ -546,9 +560,10 @@
         }
       ],
       "properties": {
-        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
+        "cnr_id": "ComfyUI-RT-HeartMuLa",
         "ver": "b188250cfd2291a836da9cc860a5980c5dac3126",
         "Node name for S&R": "HeartMuLaGenerator",
+        "aux_id": "monnky/ComfyUI-RT-HeartMuLa",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
@@ -558,8 +573,8 @@
       "widgets_values": [
         "[Intro]\n\n[Verse]\nThe sun creeps in across the floor\nI hear the traffic outside the door\nThe coffee pot begins to hiss\nIt is another morning just like this\n\n[Prechorus]\nThe world keeps spinning round and round\nFeet are planted on the ground\nI find my rhythm in the sound\n\n[Chorus]\nEvery day the light returns\nEvery day the fire burns\nWe keep on walking down this street\nMoving to the same steady beat\nIt is the ordinary magic that we meet\n\n[Verse]\nThe hours tick deeply into noon\nChasing shadows,chasing the moon\nWork is done and the lights go low\nWatching the city start to glow\n\n[Bridge]\nIt is not always easy,not always bright\nSometimes we wrestle with the night\nBut we make it to the morning light\n\n[Chorus]\nEvery day the light returns\nEvery day the fire burns\nWe keep on walking down this street\nMoving to the same steady beat\n\n[Outro]\nJust another day\nEvery single day",
         false,
-        150,
-        1.5,
+        140,
+        1.6,
         1,
         50,
         63319618031563,
@@ -716,10 +731,10 @@
     "workflowRendererVersion": "LG",
     "ue_links": [],
     "ds": {
-      "scale": 0.5989500000000023,
+      "scale": 0.33809166040571176,
       "offset": [
-        732.7747495876177,
-        948.6532854730366
+        1383.8424333104817,
+        1383.2559688894125
       ]
     },
     "links_added_by_ue": [],
