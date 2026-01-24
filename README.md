@@ -1,8 +1,8 @@
 # $${\color{white}ComfyUI-}{\color{orange}R}{\color{yellow}T}{\color{white}-HeartMuLa}$$ (v 1.09)
-![thank you](https://raw.githubusercontent.com/monnky/ComfyUI-RT-HeartMuLa/refs/heads/main/assets/ui1.png)
+![thank you](assets/thanks.png)
 A custom node suite for ComfyUI.
 
-![Model Files Location](assets/ui1.png)
+![Model Files Location](https://raw.githubusercontent.com/monnky/ComfyUI-RT-HeartMuLa/refs/heads/main/assets/ui1.png )
 ---
 ### Recommended Loader Settings # $${\color{Green}First \ generate \ 20 \ seconds \ audio \ to \ check \ the \ quality}$$
 
