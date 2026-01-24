@@ -108,7 +108,7 @@ ___
 
 Model File Structure
 Once downloaded, your folder should look like this:
-![Model Files Location](assets/modelfiles.png)
+![Model Files Location](assets/modelfilesv2.png)
 
 ___
 
