@@ -27,12 +27,28 @@ try:
 except ImportError as e:
     log(f"❌ Library Import Error: {e}")
 
+
+##################################################################################################
 class HeartMuLaLoader:
     @classmethod
     def INPUT_TYPES(s):
         return {
             "required": {
-                "model_name": (["HeartMuLa-oss-3B", "HeartMuLa-oss-7B"],),
+                "model_name": (
+                    [
+                        "HeartMuLa-oss-3B", 
+                        "HeartMuLa-RL-oss-3B-20260123",  # New RL Model
+                        # "HeartMuLa-oss-7B",            # <--- COMMENTED OUT
+                    ],
+                ),
+                # New Dropdown to select the specific Codec version
+                "codec_name": (
+                    [
+                        "HeartCodec-oss-20260123",       # New 2026 Codec (Default)
+                        "HeartCodec-oss",                # Old Codec
+                    ], 
+                    {"default": "HeartCodec-oss-20260123"}
+                ),
                 "quantization": (["none", "4bit", "8bit"], {"default": "4bit"}),
                 "mula_precision": (["auto", "fp16", "bf16", "fp32"], {"default": "bf16"}),
                 "codec_precision": (["auto", "fp16", "bf16", "fp32"], {"default": "fp32"}),
@@ -46,10 +62,16 @@ class HeartMuLaLoader:
     FUNCTION = "load_model"
     CATEGORY = "HeartMuLa/Loaders"
 
-    def load_model(self, model_name, quantization, mula_precision, codec_precision, device, compile_model):
-        # Report the split configuration
+    # Updated signature to accept 'codec_name'
+    def load_model(self, model_name, codec_name, quantization, mula_precision, codec_precision, device, compile_model):
+        # 1. SAFETY CHECK: Prevent "NoneType" crash if libraries are missing
+        if HeartCodec is None:
+            raise RuntimeError("❌ CRITICAL ERROR: Required libraries are missing! Please run 'pip install -r requirements.txt' in the ComfyUI-RT-HeartMuLa folder. (Missing: vector-quantize-pytorch)")
+
+        # 2. Update Info Block
         LAST_LOADER_INFO.update({
-            "model_name": model_name, 
+            "model_name": model_name,
+            "codec_name": codec_name,
             "quant": quantization, 
             "prec": f"{mula_precision}/{codec_precision}", 
             "dev": device,
@@ -57,11 +79,13 @@ class HeartMuLaLoader:
         })
         
         mm.soft_empty_cache()
-        log(f"Loading {model_name} (Mula: {mula_precision}, Codec: {codec_precision})...")
+        log(f"Loading {model_name} using {codec_name} (Mula: {mula_precision}, Codec: {codec_precision})...")
         
         base_path = os.path.join(folder_paths.models_dir, "HeartMuLa")
         model_path = os.path.join(base_path, model_name)
-        codec_path = os.path.join(base_path, "HeartCodec-oss")
+        
+        # 3. CHANGED: Use the selected codec_name variable
+        codec_path = os.path.join(base_path, codec_name)
         
         gen_config_path = os.path.join(base_path, "gen_config.json")
         gen_config = HeartMuLaGenConfig(**json.load(open(gen_config_path, encoding="utf-8"))) if os.path.exists(gen_config_path) else HeartMuLaGenConfig()
@@ -79,7 +103,7 @@ class HeartMuLaLoader:
         mula_dtype = get_dtype(mula_precision)
         codec_dtype = get_dtype(codec_precision)
 
-        # FIX: Load Codec and force explicit dtype to avoid hanging during flow-matching
+        # Load Codec
         codec = HeartCodec.from_pretrained(codec_path).to(device).to(codec_dtype)
         codec.eval() 
 
@@ -103,6 +127,10 @@ class HeartMuLaLoader:
             model = torch.compile(model, mode="reduce-overhead")
         
         return (model, tokenizer, codec, gen_config)
+    
+###############################################################################################################
+
+
 
 class HeartMuLaInfo:
     @classmethod
